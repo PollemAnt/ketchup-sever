@@ -11,7 +11,24 @@ version = "0.0.1"
 
 application {
     mainClass.set("com.example.ApplicationKt")
-    mainClass = "io.ktor.server.netty.EngineMain"
+    //mainClass = "io.ktor.server.netty.EngineMain"
+}
+
+tasks.register<Jar>("fatJar") {
+    group = "build"
+    archiveClassifier.set("all")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes["Main-Class"] = "com.example.ApplicationKt"
+    }
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
 
 repositories {
