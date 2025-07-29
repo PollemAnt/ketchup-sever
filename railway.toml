@@ -2,7 +2,7 @@
 buildCommand = "./gradlew fatJar"
 
 [start]
-cmd = "java -jar build/libs/ketchup-sever-0.0.1-all.jar"
+cmd = "java -jar build/libs/app-all.jar"
 
 [env]
 JAVA_VERSION = "11"

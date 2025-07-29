@@ -16,6 +16,8 @@ application {
 
 tasks.register<Jar>("fatJar") {
     group = "build"
+    archiveBaseName.set("app")
+    archiveVersion.set("")
     archiveClassifier.set("all")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
