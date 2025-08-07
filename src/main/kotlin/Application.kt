@@ -19,17 +19,6 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    configureRouting()
-    install(CORS) {
-        anyHost()
-        allowNonSimpleContentTypes = true
-    }
-
-    install(ContentNegotiation) {
-        json()
-    }
-
-
     install(Authentication) {
         jwt("auth-jwt") {
             realm = "ketchup-app"
@@ -40,8 +29,21 @@ fun Application.module() {
                     .build()
             )
             validate { credential ->
-                if (credential.payload.getClaim("username").asString() != "") JWTPrincipal(credential.payload) else null
+                if (credential.payload.getClaim("username").asString() != "") JWTPrincipal(
+                    credential.payload
+                ) else null
             }
         }
     }
+
+    install(CORS) {
+        anyHost()
+        allowNonSimpleContentTypes = true
+    }
+
+    install(ContentNegotiation) {
+        json()
+    }
+
+    configureRouting()
 }
