@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.example.models.ImageItem
 import com.example.models.User
 import com.example.models.users
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
@@ -18,6 +19,9 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
+        get("/") {
+            call.respondText("Ketchup server is running!", ContentType.Text.Plain)
+        }
         authRoutes()
         authenticate("auth-jwt") {
             post("/ketchups") {
@@ -56,6 +60,7 @@ fun Application.configureRouting() {
     }
 }
 
+
 fun Route.authRoutes() {
     post("/register") {
         val creds = call.receive<User>()
@@ -75,7 +80,7 @@ fun Route.authRoutes() {
                 .withAudience("ketchup-users") // odbiorca tokena
                 .withIssuer("ketchup-server")// kto go wystawił
                 .withClaim("username", user.username) // co w nim zapisujemy
-                .sign(Algorithm.HMAC256("my-secret")) // podpisanie hasłem
+                .sign(Algorithm.HMAC256("my-super-secret")) // podpisanie hasłem
             call.respond(mapOf("token" to token))
         } else {
             call.respond(HttpStatusCode.Unauthorized, "Nieprawidłowe dane")
